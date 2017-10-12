@@ -1,6 +1,8 @@
 package com.example.android.json;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton btnNext;
 
     ArrayList<String> keywordList = new ArrayList<>();
+    int selectedOption = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Toast.makeText(MainActivity.this, "Internet Connected", Toast.LENGTH_SHORT).show();
                     new GetDataAsync(MainActivity.this).execute("http://dev.theappsdr.com/apis/photos/keywords.php?format=json"); //Insert URL
+
                 } else {
                     Toast.makeText(MainActivity.this, "No Connection", Toast.LENGTH_SHORT).show();
                 }
@@ -71,6 +75,24 @@ public class MainActivity extends AppCompatActivity {
 
     void handleResult(ArrayList<String> Result) {
         Log.d("demo", Result.toString());
+
+        CharSequence options[] = new CharSequence[Result.size()];
+
+        for(int i = 1; i<=Result.size(); i++)
+        {
+            options[i-1] = Result.get(i-1);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick a color");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedOption = which;
+            }
+        });
+        builder.show();
+
     }
 
     void handleImage(Bitmap bitmap) {
