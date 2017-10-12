@@ -1,6 +1,7 @@
 package com.example.android.json;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     ImageButton btnPrev;
     ImageButton btnNext;
 
+    ProgressDialog progress;
+
+    String finalURL = "http://dev.theappsdr.com/apis/photos/index.php?keyword=";
+
     ArrayList<String> keywordList = new ArrayList<>();
     int selectedOption = 0;
 
@@ -45,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         imgMain     = (ImageView)findViewById(R.id.imgMain);
         btnPrev     = (ImageButton)findViewById(R.id.btnPrev);
         btnNext     = (ImageButton)findViewById(R.id.btnNext);
+
+        progress = new ProgressDialog(MainActivity.this);
+        progress.setCancelable(false);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,15 +81,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    void handleResult(ArrayList<String> Result) {
+    void handleResult(final ArrayList<String> Result) {
         Log.d("demo", Result.toString());
 
-        CharSequence options[] = new CharSequence[Result.size()];
+        final CharSequence options[] = new CharSequence[Result.size()];
 
         for(int i = 1; i<=Result.size(); i++)
         {
             options[i-1] = Result.get(i-1);
         }
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose a Keyword");
@@ -89,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 selectedOption = which;
+                txtKeyword.setText(Result.get(selectedOption));
+                finalURL = finalURL.concat(Result.get(selectedOption));
+                progress.setTitle("Loading Dictionary");
+                progress.show();
+                new GetImageAsync(MainActivity.this).execute(finalURL);
             }
         });
         builder.show();
