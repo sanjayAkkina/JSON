@@ -29,6 +29,7 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<String>> {
         try {
             URL url = new URL(params[0]);
             connection = (HttpURLConnection) url.openConnection();
+
             connection.connect();
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String json = IOUtils.toString(connection.getInputStream(), "UTF-8");
