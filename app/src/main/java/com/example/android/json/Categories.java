@@ -13,7 +13,7 @@ public class Categories {
     String categoryFive = "";
     int counter = 0;
 
-    public Categories() {};
+    public Categories() {}
 
     public Categories(String choice) {
         if (counter == 0)

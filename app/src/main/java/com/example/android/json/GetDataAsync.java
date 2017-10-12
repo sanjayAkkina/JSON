@@ -36,21 +36,19 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<Categories>>
                 JSONArray categories = root.getJSONArray("categories");
                 for (int i = 0; i < categories.length(); i++)
                 {
-                    JSONArray keywordSearch = categories.getJSONArray(i);
+                    String keywordSearch = categories.get(i).toString();
 
-                    /*
-                    JSONObject keywordSearch = categories.getJSONObject(i);
                     Log.d("demo", String.valueOf(keywordSearch));
                     Categories keyword = new Categories();
-                    keyword.setCategoryZero(String.valueOf(keywordSearch.getInt("0")));
-                    /*
-                    keyword.categoryZero = keywordSearch.getString("1");
-                    keyword.categoryOne = keywordSearch.getString("1");
-                    keyword.categoryTwo = keywordSearch.getString("2");
-                    keyword.categoryThree = keywordSearch.getString("3");
-                    keyword.categoryFour = keywordSearch.getString("4");
-                    keyword.categoryFive = keywordSearch.getString("5");
-                    */
+                    //keyword.setCategoryZero(String.valueOf(keywordSearch.getInt(0)));
+
+                    //keyword.categoryZero = keywordSearch.getString("1");
+                    //keyword.categoryOne = keywordSearch.getString(1);
+                    //keyword.categoryTwo = keywordSearch.getString(2);
+                    //keyword.categoryThree = keywordSearch.getString(3);
+                    //keyword.categoryFour = keywordSearch.getString(4);
+                    //keyword.categoryFive = keywordSearch.getString(5);
+
                     result.add(keyword);
                 }
                 return result;
