@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
+import java.util.ArrayList;
+
 import org.apache.commons.io.*;
 
 
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton btnPrev;
     ImageButton btnNext;
+
+    ArrayList<String> keywordList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isConnected())
                 {
                     Toast.makeText(MainActivity.this, "Internet Connected", Toast.LENGTH_SHORT).show();
-                    new GetDataAsync().execute("http://dev.theappsdr.com/apis/photos/keywords.php?format=json"); //Insert URL
+                    new GetDataAsync(MainActivity.this).execute("http://dev.theappsdr.com/apis/photos/keywords.php?format=json"); //Insert URL
                 } else {
                     Toast.makeText(MainActivity.this, "No Connection", Toast.LENGTH_SHORT).show();
                 }
@@ -61,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    void handleResult(ArrayList<String> Result) {
+        Log.d("demo", Result.toString());
     }
 
 }

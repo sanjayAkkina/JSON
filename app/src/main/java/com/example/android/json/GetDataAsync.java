@@ -22,6 +22,11 @@ import java.util.Locale;
 
 
 public class GetDataAsync extends AsyncTask<String, Void, ArrayList<String>> {
+
+    MainActivity main;
+
+    public GetDataAsync(MainActivity activity){this.main = activity;}
+
     @Override
     protected ArrayList<String> doInBackground(String... params) {
         HttpURLConnection connection = null;
@@ -64,6 +69,8 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<String>> {
     protected void onPostExecute(ArrayList<String> result) {
         if (result.size() > 0) {
             Log.d("demo", result.toString());
+            super.onPostExecute(result);
+            main.handleResult(result);
         } else {
             Log.d("demo", "null result");
         }
