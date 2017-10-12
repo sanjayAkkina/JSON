@@ -24,14 +24,18 @@ public class GetImageAsync extends AsyncTask<String, Void, String> {
         HttpURLConnection connection;
         bitmap = null;
         try {
+            System.out.println("Attempting to retrieve image from " + strings[0]);
             URL url = new URL(strings[0]);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                System.out.println("Connection successful. Retrieving BMP...");
                 bitmap = BitmapFactory.decodeStream(connection.getInputStream());
+                System.out.println("BMP Received!");
             }
         } catch (Exception e) {
-            //Handle the exceptions
+            System.out.println("Error");
+            System.out.println(e);
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package com.example.android.json;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> keywordList = new ArrayList<>();
     int selectedOption = 0;
+    CharSequence options[];
+    ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         imgMain     = (ImageView)findViewById(R.id.imgMain);
         btnPrev     = (ImageButton)findViewById(R.id.btnPrev);
         btnNext     = (ImageButton)findViewById(R.id.btnNext);
+
+        loadingBar  = new ProgressDialog(this);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     void handleResult(ArrayList<String> Result) {
         Log.d("demo", Result.toString());
 
-        CharSequence options[] = new CharSequence[Result.size()];
+        options = new CharSequence[Result.size()];
 
         for(int i = 1; i<=Result.size(); i++)
         {
@@ -84,11 +90,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick a color");
+        builder.setTitle("Select a keyword");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 selectedOption = which;
+                new GetImageAsync(MainActivity.this).execute(options[selectedOption].toString());
             }
         });
         builder.show();

@@ -27,6 +27,7 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<String>> {
 
     public GetDataAsync(MainActivity activity){this.main = activity;}
 
+
     @Override
     protected ArrayList<String> doInBackground(String... params) {
         HttpURLConnection connection = null;
