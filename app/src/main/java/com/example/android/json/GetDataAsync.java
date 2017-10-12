@@ -2,6 +2,7 @@ package com.example.android.json;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Sanjay on 10/11/17.
@@ -34,9 +36,13 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<Categories>>
                 JSONArray categories = root.getJSONArray("categories");
                 for (int i = 0; i < categories.length(); i++)
                 {
-                    JSONObject keywordSearch = categories.getJSONObject(i);
-                    Categories keyword = new Categories();
+                    JSONArray keywordSearch = categories.getJSONArray(i);
 
+                    /*
+                    JSONObject keywordSearch = categories.getJSONObject(i);
+                    Log.d("demo", String.valueOf(keywordSearch));
+                    Categories keyword = new Categories();
+                    keyword.setCategoryZero(String.valueOf(keywordSearch.getInt("0")));
                     /*
                     keyword.categoryZero = keywordSearch.getString("1");
                     keyword.categoryOne = keywordSearch.getString("1");
