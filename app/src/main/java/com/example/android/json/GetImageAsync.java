@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by Thacher on 10/12/2017.
+ * Created by thach on 10/12/2017.
  */
 
 public class GetImageAsync extends AsyncTask<String, Void, String> {
@@ -24,18 +24,14 @@ public class GetImageAsync extends AsyncTask<String, Void, String> {
         HttpURLConnection connection;
         bitmap = null;
         try {
-            System.out.println("Attempting to retrieve image from " + strings[0]);
             URL url = new URL(strings[0]);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                System.out.println("Connection successful. Retrieving BMP...");
                 bitmap = BitmapFactory.decodeStream(connection.getInputStream());
-                System.out.println("BMP Received!");
             }
         } catch (Exception e) {
-            System.out.println("Error");
-            System.out.println(e);
+            //Handle the exceptions
         }
         return null;
     }
@@ -44,6 +40,7 @@ public class GetImageAsync extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result){
         super.onPostExecute(result);
 
-        activity.handleImage(bitmap);
+        activity.handleResultImage(bitmap);
     }
 }
+

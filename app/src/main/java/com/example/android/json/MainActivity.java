@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -35,12 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressDialog progress;
 
-    String finalURL = "http://dev.theappsdr.com/apis/photos/index.php?keyword=";
+    String finalURL = "http://dev.theappsdr.com/apis/photos/index.php?type=json&keyword=";
+    String[] urlList;
+
 
     ArrayList<String> keywordList = new ArrayList<>();
     int selectedOption = 0;
     CharSequence options[];
     ProgressDialog loadingBar;
+    int currentImage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +66,49 @@ public class MainActivity extends AppCompatActivity {
                 if (isConnected())
                 {
                     Toast.makeText(MainActivity.this, "Internet Connected", Toast.LENGTH_SHORT).show();
+                    progress.setTitle("Loading Dictionary");
+                    progress.show();
                     new GetDataAsync(MainActivity.this).execute("http://dev.theappsdr.com/apis/photos/keywords.php?format=json"); //Insert URL
 
                 } else {
                     Toast.makeText(MainActivity.this, "No Connection", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentImage<urlList.length-1)
+                {
+                    currentImage++;
+                }
+                else
+                {
+                    currentImage = 0;
+                }
+                new GetImageAsync(MainActivity.this).execute(urlList[currentImage]);
+
+                progress.setTitle("Loading Image");
+                progress.show();
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentImage>0)
+                {
+                    currentImage--;
+                }
+                else
+                {
+                    currentImage = urlList.length-1;
+                }
+                new GetImageAsync(MainActivity.this).execute(urlList[currentImage]);
+
+                progress.setTitle("Loading Image");
+                progress.show();
             }
         });
 
@@ -84,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void handleResult(final ArrayList<String> Result) {
+        progress.dismiss();
         Log.d("demo", Result.toString());
 
         options = new CharSequence[Result.size()];
@@ -93,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
             options[i-1] = Result.get(i-1);
         }
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select a keyword");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -101,19 +143,31 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 selectedOption = which;
                 txtKeyword.setText(Result.get(selectedOption));
-                finalURL = finalURL.concat(Result.get(selectedOption));
-                progress.setTitle("Loading Dictionary");
+                progress.setTitle("Loading Image...");
                 progress.show();
-                new GetImageAsync(MainActivity.this).execute(finalURL);
-                new GetImageAsync(MainActivity.this).execute(options[selectedOption].toString());
+                new GetImageUrlsAsync(MainActivity.this).execute(finalURL + options[which].toString());
             }
         });
         builder.show();
 
     }
 
-    void handleImage(Bitmap bitmap) {
+    void handleImageUrls(String[] urls) {
+        urlList = new String[urls.length];
+
+        for(int i = 0; i<urls.length; i++)
+        {
+            urlList[i] = urls[i];
+        }
+
+        progress.dismiss();
+        new GetImageAsync(MainActivity.this).execute(urls[0]);
+
+    }
+
+    void handleResultImage(Bitmap bitmap) {
         imgMain.setImageBitmap(bitmap);
+        progress.dismiss();
     }
 
 }
