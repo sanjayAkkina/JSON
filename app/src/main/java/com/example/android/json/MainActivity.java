@@ -1,6 +1,7 @@
 package com.example.android.json;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -70,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
     void handleResult(ArrayList<String> Result) {
         Log.d("demo", Result.toString());
+    }
+
+    void handleImage(Bitmap bitmap) {
+        imgMain.setImageBitmap(bitmap);
     }
 
 }
