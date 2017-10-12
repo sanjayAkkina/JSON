@@ -21,11 +21,11 @@ import java.util.Locale;
  */
 
 
-public class GetDataAsync extends AsyncTask<String, Void, ArrayList<Categories>> {
+public class GetDataAsync extends AsyncTask<String, Void, ArrayList<String>> {
     @Override
-    protected ArrayList<Categories> doInBackground(String... params) {
+    protected ArrayList<String> doInBackground(String... params) {
         HttpURLConnection connection = null;
-        ArrayList<Categories> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
         try {
             URL url = new URL(params[0]);
             connection = (HttpURLConnection) url.openConnection();
@@ -39,17 +39,8 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<Categories>>
                     String keywordSearch = categories.get(i).toString();
 
                     Log.d("demo", String.valueOf(keywordSearch));
-                    Categories keyword = new Categories();
-                    //keyword.setCategoryZero(String.valueOf(keywordSearch.getInt(0)));
 
-                    //keyword.categoryZero = keywordSearch.getString("1");
-                    //keyword.categoryOne = keywordSearch.getString(1);
-                    //keyword.categoryTwo = keywordSearch.getString(2);
-                    //keyword.categoryThree = keywordSearch.getString(3);
-                    //keyword.categoryFour = keywordSearch.getString(4);
-                    //keyword.categoryFive = keywordSearch.getString(5);
-
-                    result.add(keyword);
+                    result.add(keywordSearch);
                 }
                 return result;
             }
@@ -68,7 +59,7 @@ public class GetDataAsync extends AsyncTask<String, Void, ArrayList<Categories>>
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Categories> result) {
+    protected void onPostExecute(ArrayList<String> result) {
         if (result.size() > 0) {
             Log.d("demo", result.toString());
         } else {
